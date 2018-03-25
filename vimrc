@@ -51,7 +51,7 @@ filetype plugin indent on    " enables filetype detection
 "fold
 let g:SimpylFold_docstring_preview = 1
 "complete
-"let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
+let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict'
 "autocomplete ycm
 let g:ycm_auto_trigger = 1
 let g:ycm_error_symbol = '>>'
@@ -76,7 +76,7 @@ set expandtab                   " Tabs are spaces, not tabs
 set tabstop=4                   " An indentation every four columns
 set softtabstop=4               " Let backspace delete indent
 set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
-
+set hlsearch
 set linespace=0
 "增强模式中的命令行自动完成操作
 set wildmenu
@@ -125,12 +125,12 @@ au BufRead,BufNewFile *.py,*.pyw set expandtab
 au BufRead,BufNewFile *.py set softtabstop=4
 
 " Use the below highlight group when displaying bad whitespace is desired.
-"highlight BadWhitespace ctermbg=red guibg=yellow
+highlight BadWhitespace ctermbg=red guibg=yellow
 
 " Display tabs at the beginning of a line in Python mode as bad.
 "au BufRead,BufNewFile *.py,*.pyw match BadWhitespace /^\t\+/
 " Make trailing whitespace be flagged as bad.
-"au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 " Wrap text after a certain number of characters
 au BufRead,BufNewFile *.py,*.pyw, set textwidth=100
@@ -140,7 +140,8 @@ au BufNewFile *.py,*.pyw,*.c,*.h set fileformat=unix
 
 " Set the default file encoding to UTF-8:
 set encoding=utf-8
-
+set fileencodings=utf-8,gbk,gb2312,big5
+let &termencoding=&encoding
 " For full syntax highlighting:
 let python_highlight_all=1
 syntax enable
@@ -153,6 +154,7 @@ autocmd FileType python set autoindent
 set backspace=indent,eol,start
 
 "Folding based on indentation:
+set foldlevel=100
 autocmd FileType python set foldmethod=indent
 "use space to open folds
 nnoremap <space> za 
@@ -174,29 +176,7 @@ endfunc
 autocmd vimenter * if !argc() | NERDTree | endif
 "vim-airline
 let g:airline_powerline_fonts=1
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"新建.c,.h,.sh,.java文件，自动插入文件头 
-"autocmd BufNewFile *.cpp,*.[ch],*.sh,*.py exec ":call SetTitle()" 
-"""定义函数SetTitle，自动插入文件头 
-"python header
-"func SetTitle()
-"    if &filetype == 'sh'
-"        call setline(1,"\#!/bin/bash")
-"        call append(line("."),"")
-"    elseif &filetype == 'python'
-"        call setline(1,"#!/usr/bin/env python")
-"        call append(line("."),"# -*- coding: utf-8 -*-")
-"        call append(line(".")+1, "########################################################################") 
-"        call append(line(".")+2,"#")
-"        call append(line(".")+3,"# Copyright (c) 2016 Baidu.com, Inc. All Rights Reserved")
-"        call append(line(".")+4,"#")
-"        call append(line(".")+5,"########################################################################")
-"        call append(line(".")+6,"")
-"    endif
-"endfunc
-"autocmd BufNewFile * normal G
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"baidu doc for vim
+
 "public auto indent
 set cino=g0
 set nocp
@@ -663,7 +643,7 @@ endfunction
 function! <SID>GetEmail()
     let home = $HOME
     let user = matchstr(home, '[^/\\]\+$')
-    return user . "@baidu.com"
+    return user . "@company.com"
 endfunction
 
 function! <SID>GetDoxFileHeader(leading_blank)
@@ -671,7 +651,7 @@ function! <SID>GetDoxFileHeader(leading_blank)
     let doc = ""
   let doc = doc. a:leading_blank."/***************************************************************************\n"
     let doc = doc. a:leading_blank." * \n"
-  let doc = doc. a:leading_blank." * Copyright (c) ".<SID>GetYear()." Baidu.com, Inc. All Rights Reserved\n"
+  let doc = doc. a:leading_blank." * Copyright (c) ".<SID>GetYear()." Company.com, Inc. All Rights Reserved\n"
   let doc = doc. a:leading_blank." * $Id$ \n"
   let doc = doc. a:leading_blank." * \n"
   let doc = doc. a:leading_blank." **************************************************************************/\n"
@@ -864,8 +844,6 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 "  python specification
-"        by qinan@baidu.com
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -934,14 +912,14 @@ function! <SID>GetPyDocFileHeader(leading_blank)
     let doc = "#!/usr/bin/env python\n"
     let doc = doc. a:leading_blank."# -*- coding: utf-8 -*-\n"
     let doc = doc. a:leading_blank."########################################################################\n"
-    let doc = doc. a:leading_blank."# \n"
-    let doc = doc. a:leading_blank."# Copyright (c) ".<SID>GetYear()." Baidu.com, Inc. All Rights Reserved\n"
-    let doc = doc. a:leading_blank."# \n"
+    let doc = doc. a:leading_blank."#\n"
+    let doc = doc. a:leading_blank."# Copyright (c) ".<SID>GetYear()." Company.com, Inc. All Rights Reserved\n"
+    let doc = doc. a:leading_blank."#\n"
     let doc = doc. a:leading_blank."########################################################################\n"
     "let doc = doc. a:leading_blank." \n"
     let doc = doc. a:leading_blank."\"\"\"\n"
     let doc = doc. a:leading_blank."File: ".<SID>GetFileName()."\n"
-    let doc = doc. a:leading_blank."Author: ".<SID>GetUserName()."(".<SID>GetUserName()."@baidu.com)\n"
+    let doc = doc. a:leading_blank."Author: ".<SID>GetUserName()."(".<SID>GetUserName()."@company.com)\n"
     let doc = doc. a:leading_blank."Date: ".<SID>GetDate()."\n"
     let doc = doc. a:leading_blank."\"\"\"\n"
     return doc
@@ -1061,8 +1039,8 @@ map  ;dm      :call <SID>GetDoxFH(0)<CR>
 imap ;dm <ESC>:call <SID>GetDoxFH(0)<CR>
 autocmd FileType c,cpp,java,sh,awk,vim,sed,perl nnoremap <silent> <Leader>a :call <SID>GetDoxFH(0)<CR>
 "start
-map  ;dp      :call <SID>GetDoxFH(4)<CR>
-imap ;dp <ESC>:call <SID>GetDoxFH(4)<CR>
+map  ;dz      :call <SID>GetDoxFH(4)<CR>
+imap ;dz <ESC>:call <SID>GetDoxFH(4)<CR>
 "start 
 map  ;dc     :call <SID>GetDoxFH(1)<CR>
 imap ;dc <ESC>:call <SID>GetDoxFH(1)<CR>
@@ -1082,6 +1060,3 @@ autocmd BufNewFile *.h,*.cpp,*.c,*.cc,*.java,*.pl,*.php  :call <SID>InsertFormat
 autocmd BufNewFile *h :call <SID>InsertHeadFormat()
 autocmd BufNewFile *.py :call <SID>InsertPyFormat()
 autocmd BufNewFile * normal G
-
-
-
